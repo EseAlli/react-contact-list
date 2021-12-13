@@ -12,7 +12,7 @@ const starterContact = [
 ]
 
 const nonExistingId = async () => {
-  const contact = new Contact({ first_name: 'Fake', last_name:"Name", number: "0808089736829", created: new Date() })
+  const contact = new Contact({ first_name: 'Fake', last_name:"Name", number: "0808089736829", email:"fakeemail@gmail.com", created: new Date() })
   await contact.save()
   await contact.remove()
 

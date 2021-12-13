@@ -7,32 +7,28 @@ const api = supertest(app)
 
 describe('when there is initially some contact saved', () => {
   
-    // beforeEach(async () => {
-    //   await Contact.deleteMany({})
-    //   await Contact.insertMany(helper.starterContact)
-    // })
+    test('contact are returned as json', async () => {
+      await api
+        .get('/api/contact')
+        .expect(200)
+        .expect('Content-Type', /application\/json/)
+    })
   
-    // test('contact are returned as json', async () => {
-    //   await api
-    //     .get('/api/contact')
-    //     .expect(200)
-    //     .expect('Content-Type', /application\/json/)
-    // })
+    test('all contact are returned', async () => {
+      const response = await api.get('/api/contact')
+      const contactsAtStart = await helper.contactsInDatabase()
   
-    // test('all contact are returned', async () => {
-    //   const response = await api.get('/api/contact')
+      expect(response.body).toHaveLength(contactsAtStart.length)
+    })
   
-    //   expect(response.body).toHaveLength(helper.starterContact.length)
-    // })
+    test('a specific contact is within the returned contact', async () => {
+      const response = await api.get('/api/contact')
   
-    // test('a specific contact is within the returned contact', async () => {
-    //   const response = await api.get('/api/contact')
-  
-    //   const contents = response.body.map(r => r.first_name)
-    //   expect(contents).toContain(
-    //     'Ese'
-    //   )
-    // })
+      const contents = response.body.map(r => r.first_name)
+      expect(contents).toContain(
+        'Jane'
+      )
+    })
   
     describe('viewing a specific contact', () => {
   
@@ -47,91 +43,64 @@ describe('when there is initially some contact saved', () => {
           .expect('Content-Type', /application\/json/)
         
         const processedContactToView = JSON.parse(JSON.stringify(contactToView))
-        console.log(processedContactToView)
   
         expect(resultContact.body).toEqual(processedContactToView)
       })
   
-    //   test('fails with statuscode 404 if contact does not exist', async () => {
-    //     const validNonexistingId = await helper.nonExistingId()
+      test('fails with statuscode 404 if contact does not exist', async () => {
+        const validNonexistingId = await helper.nonExistingId()
   
-    //     await api
-    //       .get(`/api/contact/${validNonexistingId}`)
-    //       .expect(404)
-    //   })
+        await api
+          .get(`/api/contact/${validNonexistingId}`)
+          .expect(404)
+      })
   
-    //   test('fails with statuscode 400 id is invalid', async () => {
-    //     const invalidId = '5a3d5da59070081a82a3445'
+      test('fails with statuscode 400 id is invalid', async () => {
+        const invalidId = '5a3d5da59070081a82a3445'
   
-    //     await api
-    //       .get(`/api/contact/${invalidId}`)
-    //       .expect(400)
-    //   })
+        await api
+          .get(`/api/contact/${invalidId}`)
+          .expect(400)
+      })
     })
   
-    // describe('addition of a new contact', () => {
+    describe('addition of a new contact', () => {
   
-    //   test('succeeds with valid data', async () => {
-    //     const newContact = {
-    //       content: 'async/await simplifies making async calls',
-    //       important: true,
-    //     }
+      test('succeeds with valid data', async () => {
+        const newContact = {
+          first_name: "Jane",
+          last_name: "Doe",
+          number: "0808036579823",
+          email: "janedoe1994@gmail.com",
+          created: new Date(),
+        }
   
-    //     await api
-    //       .post('/api/contact')
-    //       .send(newContact)
-    //       .expect(200)
-    //       .expect('Content-Type', /application\/json/)
+        await api
+          .post('/api/contact')
+          .send(newContact)
+          .expect(201)
+          .expect('Content-Type', /application\/json/)
   
   
-    //     const contactsAtEnd = await helper.contactsInDatabase()
-    //     expect(contactsAtEnd).toHaveLength(helper.starterContact.length + 1)
+        const contactsAtEnd = await helper.contactsInDatabase()
+        const email = contactsAtEnd.map(n => n.email)
+        expect(email).toContain(
+          'janedoe1994@gmail.com'
+        )
+      })
   
-    //     const contents = contactsAtEnd.map(n => n.content)
-    //     expect(contents).toContain(
-    //       'async/await simplifies making async calls'
-    //     )
-    //   })
+      test('fails with status code 400 if data invalid', async () => {
+        const newContact = {
+          first_name: "John"
+        }
   
-    //   test('fails with status code 400 if data invalid', async () => {
-    //     const newContact = {
-    //       important: true
-    //     }
-  
-    //     await api
-    //       .post('/api/contact')
-    //       .send(newContact)
-    //       .expect(400)
-  
-    //     const contactsAtEnd = await helper.contactsInDatabase()
-  
-    //     expect(contactsAtEnd).toHaveLength(helper.starterContact.length)
-    //   })
-    // })
-  
-    // describe('deletion of a contact', () => {
-  
-    //   test('succeeds with status code 204 if id is valid', async () => {
-    //     const contactsAtStart = await helper.contactsInDatabase()
-    //     console.log(contactsAtStart)
-    //     const contactToDelete = contactsAtStart[0]
-  
-    //     await api
-    //       .delete(`/api/contact/${contactToDelete.id}`)
-    //       .expect(204)
-  
-    //     const contactsAtEnd = await helper.contactsInDatabase()
-  
-    //     expect(contactsAtEnd).toHaveLength(
-    //       helper.starterContact.length - 1
-    //     )
-  
-    //     const contents = contactsAtEnd.map(r => r.content)
-  
-    //     expect(contents).not.toContain(contactToDelete.content)
-    //   })
-    // })
-  })
+        await api
+          .post('/api/contact')
+          .send(newContact)
+          .expect(400)
+      })
+    })
+})
   
   afterAll(() => {
     mongoose.connection.close()
