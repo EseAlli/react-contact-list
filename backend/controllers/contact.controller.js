@@ -71,7 +71,7 @@ const update = async(req, res, next) =>{
       if(contact){
         const added = []
         const removed = []
-        // const oldContact = await Contact.findOneAndUpdate(id, body, {new: false})
+        const updatedContact = await Contact.findOneAndUpdate(id, body, {new: true})
         for (const [key, value] of Object.entries(body)) {     
             const addedData = {
                 [key] : value
@@ -90,7 +90,8 @@ const update = async(req, res, next) =>{
         const createdHistory = await history.save()
         if (createdHistory) {
             res.status(201).json({
-                message: "Contact Updated Succesfully"
+                message: "Contact Updated Succesfully",
+                data: updatedContact
             })
         }
         else{
