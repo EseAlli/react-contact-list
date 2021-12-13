@@ -100,9 +100,9 @@ const App = () => {
       contactService
       .deleteOne(id)
       .then(()=>{
+        console.log(contacts.filter(person => person._id !== id))
         setContacts(contacts.filter(person => person._id !== id))
         setSuccessMessage(`Deleted ${newContact.first_name} ${newContact.last_name}`)
-        hook()
       })
       .catch(error=>{
         setErrorMessage(`Information of ${name} has already been removed from the server`)
