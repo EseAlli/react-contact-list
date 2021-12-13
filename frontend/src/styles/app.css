@@ -1,0 +1,95 @@
+body{
+    background-color: #f8f9fd;
+}
+h2{
+    color:rebeccapurple
+}
+table{
+    margin-left: auto;
+    margin-right: auto;
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0 5px;
+}
+
+td:first-child {
+    border-left: transparent thin solid;
+    border-radius: 20px 0 0 20px;
+}
+
+td:last-child {
+    border-right: transparent thin solid;
+    border-radius: 0 20px 20px 0;
+}
+ th {
+    padding: 8px;
+}
+td{
+    padding: 15px;
+    padding-bottom: 25px;
+    border-bottom: 1px solid #ddd;
+}
+thead{
+    background-color: white;
+    color:#808080;
+    border-right: 10px; 
+    padding-top: 12px;
+    padding-bottom: 12px;
+    text-align: left;
+    text-transform: uppercase;
+    font-size: 14px;
+
+}
+tr{background-color: white;}
+
+tr:hover {background-color: whitesmoke;}
+
+.contact-page{
+    padding: 25px;
+    
+}
+
+.add-new{
+    background-color: rebeccapurple;
+    text-transform: uppercase;
+    padding: 8px;
+    border-radius: 8px;
+    color: white;
+    border-color: transparent;
+    margin-bottom: 8px ;
+    float: right;
+}
+.dropdown{
+    background-color: transparent;
+    border-color: transparent;
+}
+.dropdown:after {
+    content: '\2807';
+    font-size: 20px;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: white;
+    min-width: 50px;
+    padding: 5px;
+    z-index: 1;
+}
+  
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+
+.dropdown-content button{
+    display: block;
+    padding-bottom: 5px;
+    background-color: transparent;
+    border-color: transparent;
+    width: 100%;
+}
+
+.dropdown-content button:hover{
+    background-color: whitesmoke;
+}
+
