@@ -5,6 +5,7 @@ const helper = require('./test_helper')
 const app = require('../app')
 const api = supertest(app)
 
+
 describe('when there is initially some contact saved', () => {
   
     test('contact are returned as json', async () => {
