@@ -1,6 +1,7 @@
 import React from "react";
 import Moment from 'react-moment'
 const Contacts = ({ contacts, deletePerson, showForm }) => {
+  const isNewContact = false
   return (
     <>
       <table>
@@ -35,7 +36,7 @@ const Contacts = ({ contacts, deletePerson, showForm }) => {
                 <td>
                   <div className="dropdown">
                     <div className="dropdown-content">
-                      <button onClick={()=>showForm(contact)}>Edit</button>
+                      <button onClick={()=>showForm(contact, isNewContact)}>Edit</button>
                       <button onClick={()=>deletePerson(contact.first_name, contact._id)}>Delete</button>
                     </div>
                   </div>

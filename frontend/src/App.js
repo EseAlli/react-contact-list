@@ -17,6 +17,7 @@ const App = () => {
   const [successMessage, setSuccessMessage] = useState("")
   const [errorMessage, setErrorMessage] = useState('')
   const [show, setShow] = useState(false)
+  const [isNewContact, setIsNewContact] = useState(true)
 
   const hook = () => {
     contactService
@@ -30,7 +31,7 @@ const App = () => {
 
   const addPerson = (event) => {
     event.preventDefault();
-    const person = contacts.find(p => p.email === newContact.email)
+    const person = contacts.find(p => p._id === newContact._id)
     if (person){
       const {_id, first_name, last_name, number, email} = newContact
       const updatedContact = {
@@ -39,15 +40,29 @@ const App = () => {
          number,
          email
       }
-      if (window.confirm(`A person with ${email} is already exists, update ${first_name}'s with a new info?`)){
+      if(!isNewContact){
         contactService
         .update(_id, updatedContact )
         .then(updatePerson =>{
           hook()
           setSuccessMessage(`Updated ${first_name}`)
+          showForm()
           setTimeout(()=>{
             setSuccessMessage(null)
           }, 5000)
+        })
+      }
+      else if (window.confirm(`A person with ${email} is already exists, update ${first_name}'s with a new info?`)){
+        contactService
+        .update(_id, updatedContact )
+        .then(updatePerson =>{
+          hook()
+          setSuccessMessage(`Updated ${first_name}`)
+          showForm()
+          setTimeout(()=>{
+            setSuccessMessage(null)
+          }, 5000)
+
         })
       }
     }
@@ -56,7 +71,9 @@ const App = () => {
       .create(newContact)
       .then(newPerson=>{
         setContacts(contacts.concat(newPerson));
-        setSuccessMessage(`Added ${newPerson.name}`)
+        setSuccessMessage(`Added ${newContact.first_name} ${newContact.last_name}`)
+        showForm()
+        hook()
         setTimeout(()=>{
             setSuccessMessage(null)
         }, 5000)
@@ -66,15 +83,15 @@ const App = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    console.log(value, name)
     setNewContact({ ...newContact, [name]: value });
   };
 
 
-  const showForm = (contact) =>{
+  const showForm = (contact, isNewContact) =>{
       setShow(!show)
       if (contact){
         setNewContact(contact)
+        setIsNewContact(isNewContact)
       }
   }
 
@@ -84,6 +101,8 @@ const App = () => {
       .deleteOne(id)
       .then(()=>{
         setContacts(contacts.filter(person => person._id !== id))
+        setSuccessMessage(`Deleted ${newContact.first_name} ${newContact.last_name}`)
+        hook()
       })
       .catch(error=>{
         setErrorMessage(`Information of ${name} has already been removed from the server`)

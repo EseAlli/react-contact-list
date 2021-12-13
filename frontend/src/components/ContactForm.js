@@ -13,7 +13,7 @@ const ContactForm = ({
       <form className="modal" onSubmit={addPerson}>
         <div className="modal-content">
             <div className="modal-container">
-            <span onClick={showForm} class="close-modal">&times;</span>
+            <span onClick={showForm} className="close-modal">&times;</span>
               <div>
                 First Name: <input name="first_name" value={first_name} onChange={handleChange} required/>
               </div>

@@ -93,3 +93,9 @@ tr:hover {background-color: whitesmoke;}
     background-color: whitesmoke;
 }
 
+@media (max-width: 768px) {
+    .add-new{
+        float: left
+    }
+}
+
